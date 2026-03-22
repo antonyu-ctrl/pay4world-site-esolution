@@ -272,21 +272,13 @@ export default function MarketingPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       {/* Page Title */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            {lang === 'ko' ? '홍보 관리 센터' : 'Promotion Management Center'}
-          </h1>
-          <p className="text-gray-500 mt-1">
-            {lang === 'ko' ? '초록별 환경재단 · AI 기반 콘텐츠 생성 및 후원자 분석' : 'GreenStar Environmental Foundation · AI-powered content generation & donor analytics'}
-          </p>
-        </div>
-        <Button>
-          <PlusIcon />
-          <span className="ml-1.5">
-            {lang === 'ko' ? '새 홍보 콘텐츠 만들기' : 'Create New Content'}
-          </span>
-        </Button>
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">
+          {lang === 'ko' ? '홍보 관리 센터' : 'Promotion Management Center'}
+        </h1>
+        <p className="text-gray-500 mt-1">
+          {lang === 'ko' ? '초록별 환경재단 · AI 기반 콘텐츠 생성 및 후원자 분석' : 'GreenStar Environmental Foundation · AI-powered content generation & donor analytics'}
+        </p>
       </div>
 
       {/* Dashboard Stats */}

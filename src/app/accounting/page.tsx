@@ -273,13 +273,11 @@ export default function AccountingPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       {/* Page Title */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{lang === 'ko' ? '재무 현황' : 'Financial Overview'}</h1>
-          <p className="text-gray-500 mt-1">{lang === 'ko' ? '단체의 재무 현황을 관리하세요' : 'Manage your organization\'s finances'}</p>
-        </div>
-        {/* Month Selector */}
-        <div className="relative">
+      <div>
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="text-2xl font-bold text-gray-900 whitespace-nowrap">{lang === 'ko' ? '재무 현황' : 'Financial Overview'}</h1>
+          {/* Month Selector */}
+          <div className="relative shrink-0">
           <button
             onClick={() => setShowMonthDropdown(!showMonthDropdown)}
             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
@@ -307,6 +305,8 @@ export default function AccountingPage() {
             </div>
           )}
         </div>
+        </div>
+        <p className="text-gray-500 mt-1">{lang === 'ko' ? '단체의 재무 현황을 관리하세요' : 'Manage your organization\'s finances'}</p>
       </div>
 
       {/* Section 1 - Dashboard Stats */}
