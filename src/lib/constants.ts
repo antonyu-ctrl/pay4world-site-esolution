@@ -9,6 +9,46 @@ export const TABS: TabDefinition[] = [
   { id: 'hr', labelKo: 'HR 관리', labelEn: 'HR', href: '/hr', role: 'organization', roleBadgeKo: '단체용', roleBadgeEn: 'Organization', icon: 'Users' },
 ];
 
+export interface MenuGroup {
+  id: string;
+  labelKo: string;
+  labelEn: string;
+  icon: string;
+  color: string;
+  bgColor: string;
+  children: TabDefinition[];
+}
+
+export const MENU_GROUPS: MenuGroup[] = [
+  {
+    id: 'customer',
+    labelKo: '개인 고객',
+    labelEn: 'Individual',
+    icon: 'User',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-500',
+    children: TABS.filter(t => t.role === 'customer'),
+  },
+  {
+    id: 'organization',
+    labelKo: '공익 단체',
+    labelEn: 'NPO',
+    icon: 'Building2',
+    color: 'text-emerald-600',
+    bgColor: 'bg-emerald-500',
+    children: TABS.filter(t => t.role === 'organization'),
+  },
+  {
+    id: 'admin',
+    labelKo: '관리자',
+    labelEn: 'Admin',
+    icon: 'Shield',
+    color: 'text-orange-600',
+    bgColor: 'bg-orange-500',
+    children: TABS.filter(t => t.role === 'admin'),
+  },
+];
+
 export const CATEGORIES: { id: OrgCategory; labelKo: string; labelEn: string }[] = [
   { id: 'all', labelKo: '전체', labelEn: 'All' },
   { id: 'children', labelKo: '어린이', labelEn: 'Children' },
