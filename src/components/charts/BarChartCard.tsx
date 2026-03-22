@@ -7,9 +7,11 @@ interface BarChartCardProps {
   bars: { dataKey: string; name: string; color: string }[];
   height?: number;
   yAxisFormatter?: (value: number) => string;
+  tooltipSuffix?: string;
+  tooltipFormatter?: (value: number) => string;
 }
 
-export default function BarChartCard({ data, bars, height = 320, yAxisFormatter }: BarChartCardProps) {
+export default function BarChartCard({ data, bars, height = 320, yAxisFormatter, tooltipSuffix = '원', tooltipFormatter }: BarChartCardProps) {
   const defaultFormatter = (value: number) => {
     if (value >= 10000) return `${(value / 10000).toFixed(0)}만`;
     return value.toLocaleString();
@@ -22,7 +24,7 @@ export default function BarChartCard({ data, bars, height = 320, yAxisFormatter 
         <XAxis dataKey="name" tick={{ fill: '#6B7280', fontSize: 13 }} axisLine={false} tickLine={false} />
         <YAxis tick={{ fill: '#6B7280', fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={yAxisFormatter || defaultFormatter} />
         <Tooltip
-          formatter={(value: unknown) => [Number(value).toLocaleString() + '원', '']}
+          formatter={(value: unknown) => [tooltipFormatter ? tooltipFormatter(Number(value)) : Number(value).toLocaleString() + tooltipSuffix, '']}
           contentStyle={{ borderRadius: 12, border: '1px solid #E5E7EB', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
         />
         <Legend wrapperStyle={{ paddingTop: 12, fontSize: 13 }} />

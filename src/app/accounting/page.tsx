@@ -271,75 +271,74 @@ export default function AccountingPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Section 1 - Dashboard Stats */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <SectionHeader
-            title={lang === 'ko' ? t.accounting.financialOverview : 'Financial Overview'}
-            subtitle={lang === 'ko' ? t.accounting.subtitle : 'Manage your organization\'s finances'}
-          />
-          {/* Month Selector */}
-          <div className="relative">
-            <button
-              onClick={() => setShowMonthDropdown(!showMonthDropdown)}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
-            >
-              <CalendarIcon />
-              {monthSelector}
-              <ChevronDownIcon />
-            </button>
-            {showMonthDropdown && (
-              <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20 overflow-hidden">
-                {monthOptions.map((month) => (
-                  <button
-                    key={month}
-                    onClick={() => {
-                      setMonthSelector(month);
-                      setShowMonthDropdown(false);
-                    }}
-                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
-                      month === monthSelector ? 'bg-brand-50 text-brand-600 font-medium' : 'text-gray-700'
-                    }`}
-                  >
-                    {month}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+      {/* Page Title */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{lang === 'ko' ? '재무 현황' : 'Financial Overview'}</h1>
+          <p className="text-gray-500 mt-1">{lang === 'ko' ? '단체의 재무 현황을 관리하세요' : 'Manage your organization\'s finances'}</p>
         </div>
+        {/* Month Selector */}
+        <div className="relative">
+          <button
+            onClick={() => setShowMonthDropdown(!showMonthDropdown)}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+          >
+            <CalendarIcon />
+            {monthSelector}
+            <ChevronDownIcon />
+          </button>
+          {showMonthDropdown && (
+            <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20 overflow-hidden">
+              {monthOptions.map((month) => (
+                <button
+                  key={month}
+                  onClick={() => {
+                    setMonthSelector(month);
+                    setShowMonthDropdown(false);
+                  }}
+                  className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
+                    month === monthSelector ? 'bg-brand-50 text-brand-600 font-medium' : 'text-gray-700'
+                  }`}
+                >
+                  {month}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard
-            title={lang === 'ko' ? '이번 달 후원금 수입' : 'Monthly Donation Income'}
-            value="₩3,420,000"
-            subtitle={lang === 'ko' ? '전월 대비 12.5% 증가' : '12.5% increase from last month'}
-            icon={<WalletIcon />}
-            gradient={STAT_GRADIENTS.green}
-          />
-          <StatCard
-            title={lang === 'ko' ? '이번 달 사업비 지출' : 'Monthly Program Expense'}
-            value="₩2,180,000"
-            subtitle={lang === 'ko' ? '전월 대비 8.3% 증가' : '8.3% increase from last month'}
-            icon={<CreditCardIcon />}
-            gradient={STAT_GRADIENTS.red}
-          />
-          <StatCard
-            title={lang === 'ko' ? '활성 후원자' : 'Active Donors'}
-            value={lang === 'ko' ? '1,234명' : '1,234'}
-            subtitle={lang === 'ko' ? '신규 28명' : '28 new donors'}
-            icon={<UsersIcon />}
-            gradient={STAT_GRADIENTS.purple}
-          />
-          <StatCard
-            title={lang === 'ko' ? '플랫폼 수수료 (3%)' : 'Platform Fee (3%)'}
-            value="₩102,600"
-            subtitle={lang === 'ko' ? '회계·세무·홍보 서비스 포함' : 'Incl. accounting, tax & marketing'}
-            icon={<PercentIcon />}
-            gradient={STAT_GRADIENTS.orange}
-          />
-        </div>
+      {/* Section 1 - Dashboard Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          title={lang === 'ko' ? '이번 달 후원금 수입' : 'Monthly Donation Income'}
+          value="₩3,420,000"
+          subtitle={lang === 'ko' ? '전월 대비 12.5% 증가' : '12.5% increase from last month'}
+          icon={<WalletIcon />}
+          gradient={STAT_GRADIENTS.green}
+        />
+        <StatCard
+          title={lang === 'ko' ? '이번 달 사업비 지출' : 'Monthly Program Expense'}
+          value="₩2,180,000"
+          subtitle={lang === 'ko' ? '전월 대비 8.3% 증가' : '8.3% increase from last month'}
+          icon={<CreditCardIcon />}
+          gradient={STAT_GRADIENTS.red}
+        />
+        <StatCard
+          title={lang === 'ko' ? '활성 후원자' : 'Active Donors'}
+          value={lang === 'ko' ? '1,234명' : '1,234'}
+          subtitle={lang === 'ko' ? '신규 28명' : '28 new donors'}
+          icon={<UsersIcon />}
+          gradient={STAT_GRADIENTS.purple}
+        />
+        <StatCard
+          title={lang === 'ko' ? '플랫폼 수수료 (3%)' : 'Platform Fee (3%)'}
+          value="₩102,600"
+          subtitle={lang === 'ko' ? '회계·세무·홍보 서비스 포함' : 'Incl. accounting, tax & marketing'}
+          icon={<PercentIcon />}
+          gradient={STAT_GRADIENTS.orange}
+        />
       </div>
 
       {/* Section 2 - Monthly Income/Expense Chart */}
@@ -496,19 +495,20 @@ export default function AccountingPage() {
 
         {/* Quick Add Form */}
         {showAddTransaction && (
-          <div className="mb-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+          <div className="mb-4 p-5 bg-gray-50 rounded-2xl border border-gray-200">
+            <p className="text-sm font-medium text-gray-700 mb-3">{lang === 'ko' ? '새 거래 추가' : 'Add New Transaction'}</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
               <input
                 type="date"
                 value={newTransaction.date}
                 onChange={(e) => setNewTransaction({ ...newTransaction, date: e.target.value })}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="px-3 py-2.5 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                 placeholder={lang === 'ko' ? '날짜' : 'Date'}
               />
               <select
                 value={newTransaction.type}
                 onChange={(e) => setNewTransaction({ ...newTransaction, type: e.target.value as 'income' | 'expense' })}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="px-3 py-2.5 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
               >
                 <option value="income">{lang === 'ko' ? '수입' : 'Income'}</option>
                 <option value="expense">{lang === 'ko' ? '지출' : 'Expense'}</option>
@@ -517,14 +517,14 @@ export default function AccountingPage() {
                 type="text"
                 value={newTransaction.description}
                 onChange={(e) => setNewTransaction({ ...newTransaction, description: e.target.value })}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="px-3 py-2.5 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                 placeholder={lang === 'ko' ? '내용' : 'Description'}
               />
               <input
                 type="text"
                 value={newTransaction.category}
                 onChange={(e) => setNewTransaction({ ...newTransaction, category: e.target.value })}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="px-3 py-2.5 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                 placeholder={lang === 'ko' ? '분류' : 'Category'}
               />
               <div className="flex gap-2">
@@ -532,7 +532,7 @@ export default function AccountingPage() {
                   type="number"
                   value={newTransaction.amount}
                   onChange={(e) => setNewTransaction({ ...newTransaction, amount: e.target.value })}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="flex-1 px-3 py-2.5 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                   placeholder={lang === 'ko' ? '금액' : 'Amount'}
                 />
                 <Button size="sm" onClick={() => setShowAddTransaction(false)}>
@@ -547,19 +547,19 @@ export default function AccountingPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left py-3 px-2 text-gray-500 font-medium">{lang === 'ko' ? '날짜' : 'Date'}</th>
-                <th className="text-left py-3 px-2 text-gray-500 font-medium">{lang === 'ko' ? '구분' : 'Type'}</th>
-                <th className="text-left py-3 px-2 text-gray-500 font-medium">{lang === 'ko' ? '내용' : 'Description'}</th>
-                <th className="text-left py-3 px-2 text-gray-500 font-medium">{lang === 'ko' ? '분류' : 'Category'}</th>
-                <th className="text-right py-3 px-2 text-gray-500 font-medium">{lang === 'ko' ? '금액' : 'Amount'}</th>
+              <tr className="border-b border-gray-200">
+                <th className="text-left py-3 px-3 text-gray-500 font-medium">{lang === 'ko' ? '날짜' : 'Date'}</th>
+                <th className="text-left py-3 px-3 text-gray-500 font-medium">{lang === 'ko' ? '구분' : 'Type'}</th>
+                <th className="text-left py-3 px-3 text-gray-500 font-medium">{lang === 'ko' ? '내용' : 'Description'}</th>
+                <th className="text-left py-3 px-3 text-gray-500 font-medium">{lang === 'ko' ? '분류' : 'Category'}</th>
+                <th className="text-right py-3 px-3 text-gray-500 font-medium">{lang === 'ko' ? '금액' : 'Amount'}</th>
               </tr>
             </thead>
             <tbody>
               {paginatedTransactions.map((tx) => (
-                <tr key={tx.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                  <td className="py-3 px-2 text-gray-600 whitespace-nowrap">{tx.date}</td>
-                  <td className="py-3 px-2">
+                <tr key={tx.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                  <td className="py-3 px-3 text-gray-600 whitespace-nowrap">{tx.date}</td>
+                  <td className="py-3 px-3">
                     <Badge
                       variant={tx.type === 'income' ? 'income' : 'expense'}
                       label={
@@ -573,14 +573,14 @@ export default function AccountingPage() {
                       }
                     />
                   </td>
-                  <td className="py-3 px-2 text-gray-800">
+                  <td className="py-3 px-3 text-gray-800">
                     {lang === 'ko' ? tx.description : tx.descriptionEn}
                   </td>
-                  <td className="py-3 px-2 text-gray-500">
+                  <td className="py-3 px-3 text-gray-500">
                     {lang === 'ko' ? tx.category : tx.categoryEn}
                   </td>
                   <td
-                    className={`py-3 px-2 text-right font-semibold whitespace-nowrap ${
+                    className={`py-3 px-3 text-right font-semibold whitespace-nowrap ${
                       tx.type === 'income' ? 'text-emerald-600' : 'text-red-500'
                     }`}
                   >
@@ -595,7 +595,7 @@ export default function AccountingPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-4 pt-4 border-t border-gray-100">
+          <div className="flex items-center justify-center gap-2 mt-5">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}

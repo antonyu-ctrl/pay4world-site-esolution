@@ -494,6 +494,7 @@ export default function HRPage() {
               { dataKey: 'absent', name: lang === 'ko' ? '결근' : 'Absent', color: '#EF4444' },
             ]}
             height={260}
+            tooltipSuffix={lang === 'ko' ? '명' : ''}
             yAxisFormatter={(v) => `${v}`}
           />
         </div>

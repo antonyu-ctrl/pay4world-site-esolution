@@ -115,7 +115,7 @@ export default function DonationPage() {
   const canProceedStep3 = !!paymentMethod && consentPrivacy && consentReceipt;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
       {/* Page header */}
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold text-gray-900">{t.donation.title}</h1>

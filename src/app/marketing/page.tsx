@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import Card from '@/components/shared/Card';
+import StatCard from '@/components/shared/StatCard';
 import SectionHeader from '@/components/shared/SectionHeader';
 import Button from '@/components/shared/Button';
 import Badge from '@/components/shared/Badge';
@@ -13,6 +14,8 @@ import { donorAgeData, donorRegionData, retentionFunnel } from '@/data/donors';
 import { campaigns, contentCalendar } from '@/data/campaigns';
 import { snsPlatforms } from '@/data/snsPlatforms';
 import { formatNumber } from '@/lib/utils';
+import { STAT_GRADIENTS } from '@/lib/constants';
+import { FileText, Users, TrendingUp, Heart } from 'lucide-react';
 
 // Icons as inline SVGs
 function BuildingIcon() {
@@ -267,22 +270,58 @@ export default function MarketingPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Section 1 - Promotion Center Header */}
-      <SectionHeader
-        title={lang === 'ko' ? '홍보 관리 센터' : 'Promotion Management Center'}
-        subtitle={lang === 'ko' ? '초록별 환경재단' : 'GreenStar Environmental Foundation'}
-        action={
-          <Button>
-            <PlusIcon />
-            <span className="ml-1.5">
-              {lang === 'ko' ? '새 홍보 콘텐츠 만들기' : 'Create New Content'}
-            </span>
-          </Button>
-        }
-      />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+      {/* Page Title */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {lang === 'ko' ? '홍보 관리 센터' : 'Promotion Management Center'}
+          </h1>
+          <p className="text-gray-500 mt-1">
+            {lang === 'ko' ? '초록별 환경재단 · AI 기반 콘텐츠 생성 및 후원자 분석' : 'GreenStar Environmental Foundation · AI-powered content generation & donor analytics'}
+          </p>
+        </div>
+        <Button>
+          <PlusIcon />
+          <span className="ml-1.5">
+            {lang === 'ko' ? '새 홍보 콘텐츠 만들기' : 'Create New Content'}
+          </span>
+        </Button>
+      </div>
 
-      {/* Section 2 - Organization Profile */}
+      {/* Dashboard Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          title={lang === 'ko' ? '총 콘텐츠' : 'Total Content'}
+          value={lang === 'ko' ? '128건' : '128'}
+          subtitle={lang === 'ko' ? '전월 대비 12건 증가' : '12 more than last month'}
+          icon={<FileText />}
+          gradient={STAT_GRADIENTS.blue}
+        />
+        <StatCard
+          title={lang === 'ko' ? '이번 달 게시' : 'Posts This Month'}
+          value={lang === 'ko' ? '24건' : '24'}
+          subtitle={lang === 'ko' ? '목표 대비 80% 달성' : '80% of monthly goal'}
+          icon={<TrendingUp />}
+          gradient={STAT_GRADIENTS.green}
+        />
+        <StatCard
+          title={lang === 'ko' ? '총 팔로워' : 'Total Followers'}
+          value={lang === 'ko' ? '45,200명' : '45,200'}
+          subtitle={lang === 'ko' ? '전월 대비 8.5% 증가' : '8.5% increase from last month'}
+          icon={<Users />}
+          gradient={STAT_GRADIENTS.purple}
+        />
+        <StatCard
+          title={lang === 'ko' ? '후원 전환율' : 'Donation Conversion'}
+          value="3.2%"
+          subtitle={lang === 'ko' ? '업계 평균 2.1% 대비 높음' : 'Above industry avg of 2.1%'}
+          icon={<Heart />}
+          gradient={STAT_GRADIENTS.orange}
+        />
+      </div>
+
+      {/* Organization Profile */}
       <Card>
         <SectionHeader
           title={lang === 'ko' ? '단체 프로필 관리' : 'Organization Profile'}
