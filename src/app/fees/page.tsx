@@ -214,16 +214,16 @@ export default function FeesPage() {
         <SectionHeader
           title={lang === 'ko' ? '단체별 수수료 내역' : 'Organization Fee Details'}
           action={
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <SearchInput
                 placeholder={lang === 'ko' ? '단체명 검색...' : 'Search org...'}
                 value={searchQuery}
                 onChange={handleSearch}
-                className="w-48 sm:w-56"
+                className="flex-1 sm:w-56 sm:flex-none"
               />
-              <Button variant="secondary" size="sm">
-                <Download className="w-4 h-4 mr-1.5" />
-                {lang === 'ko' ? 'Excel 다운로드' : 'Export Excel'}
+              <Button variant="secondary" size="sm" className="shrink-0">
+                <Download className="w-4 h-4 sm:mr-1.5" />
+                <span className="hidden sm:inline">{lang === 'ko' ? 'Excel 다운로드' : 'Export Excel'}</span>
               </Button>
             </div>
           }

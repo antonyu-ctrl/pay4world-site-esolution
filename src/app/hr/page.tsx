@@ -459,7 +459,7 @@ export default function HRPage() {
         <SectionHeader
           title={lang === 'ko' ? '급여 현황' : 'Payroll Summary'}
           action={
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <div className="relative">
                 <select
                   value={payrollMonth}
@@ -472,9 +472,9 @@ export default function HRPage() {
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
-              <Button variant="secondary" size="sm">
-                <Download className="w-4 h-4 mr-1.5" />
-                {lang === 'ko' ? '급여명세서 일괄 다운로드' : 'Download All Payslips'}
+              <Button variant="secondary" size="sm" className="shrink-0">
+                <Download className="w-4 h-4 sm:mr-1.5" />
+                <span className="hidden sm:inline">{lang === 'ko' ? '급여명세서 일괄 다운로드' : 'Download All Payslips'}</span>
               </Button>
             </div>
           }
