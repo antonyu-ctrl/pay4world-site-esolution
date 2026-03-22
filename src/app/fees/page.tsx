@@ -120,28 +120,27 @@ export default function FeesPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       {/* Page Title */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">{t.fees.title}</h1>
-        <p className="text-gray-500 mt-1">{t.fees.subtitle}</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{t.fees.title}</h1>
+          <p className="text-gray-500 mt-1">{t.fees.subtitle}</p>
+        </div>
+        <div className="relative">
+          <select
+            value={monthSelector}
+            onChange={(e) => setMonthSelector(e.target.value)}
+            className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-2.5 pr-10 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          >
+            {monthOptions.map((m) => (
+              <option key={m} value={m}>{m}</option>
+            ))}
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+        </div>
       </div>
 
       {/* Section 1 - Dashboard Stats */}
-      <div>
-        <div className="flex items-center justify-end mb-4">
-          <div className="relative">
-            <select
-              value={monthSelector}
-              onChange={(e) => setMonthSelector(e.target.value)}
-              className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-2 pr-10 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500"
-            >
-              {monthOptions.map((m) => (
-                <option key={m} value={m}>{m}</option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title={lang === 'ko' ? '이번 달 총 수수료 수익' : 'Monthly Fee Revenue'}
             value={formatCurrencyShort(4280000)}
@@ -171,7 +170,6 @@ export default function FeesPage() {
             gradient={STAT_GRADIENTS.orange}
           />
         </div>
-      </div>
 
       {/* Section 2 - Revenue Trend Chart */}
       <Card>
@@ -231,7 +229,53 @@ export default function FeesPage() {
           }
         />
 
-        <div className="mt-5 overflow-x-auto">
+        {/* Mobile Card View */}
+        <div className="mt-5 md:hidden space-y-3">
+          {paginatedFees.map((org) => (
+            <div key={org.rank} className="bg-white rounded-xl border border-gray-200 p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-600">
+                    {org.rank}
+                  </span>
+                  <span className="text-sm font-semibold text-gray-900">
+                    {lang === 'ko' ? org.orgName : org.orgNameEn}
+                  </span>
+                </div>
+                {renderStatusBadge(org.activityStatus)}
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="text-xs text-gray-500 mb-0.5">{lang === 'ko' ? '후원 총액' : 'Total Donations'}</p>
+                  <p className="font-medium text-gray-900">{formatCurrency(org.totalDonations)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-0.5">{t.fees.feeAmount}</p>
+                  <p className="font-medium text-gray-900">{formatCurrency(org.feeAmount)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-0.5">{t.fees.feeRate}</p>
+                  <span
+                    className={
+                      org.feeRate !== 3.0
+                        ? 'text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded-md text-xs'
+                        : 'text-gray-700 text-sm'
+                    }
+                  >
+                    {org.feeRate.toFixed(1)}%
+                  </span>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-0.5">{t.fees.donorCount}</p>
+                  <p className="text-sm text-gray-700">{formatNumber(org.donorCount)}{lang === 'ko' ? '명' : ''}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="mt-5 overflow-x-auto hidden md:block">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200">

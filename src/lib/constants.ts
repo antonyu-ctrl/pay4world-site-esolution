@@ -1,12 +1,14 @@
 import type { TabDefinition, OrgCategory } from '@/types';
 
 export const TABS: TabDefinition[] = [
-  { id: 'donation', labelKo: '기부 플로우', labelEn: 'Donation', href: '/donation', role: 'customer', roleBadgeKo: '고객용', roleBadgeEn: 'Customer', icon: 'Heart' },
+  { id: 'donation', labelKo: '기부 플로우', labelEn: 'Donation', href: '/donation', role: 'customer', roleBadgeKo: '고객용', roleBadgeEn: 'Customer', icon: 'Heart', hidden: true },
   { id: 'tax', labelKo: '개인 세무', labelEn: 'Tax Service', href: '/tax', role: 'customer', roleBadgeKo: '고객용', roleBadgeEn: 'Customer', icon: 'FileText' },
+  { id: 'favorites', labelKo: '관심 단체', labelEn: 'Favorites', href: '/favorites', role: 'customer', roleBadgeKo: '고객용', roleBadgeEn: 'Customer', icon: 'Heart' },
+  { id: 'rewards', labelKo: '기부 포인트', labelEn: 'Rewards', href: '/rewards', role: 'customer', roleBadgeKo: '고객용', roleBadgeEn: 'Customer', icon: 'Award' },
   { id: 'accounting', labelKo: '회계 서비스', labelEn: 'Accounting', href: '/accounting', role: 'organization', roleBadgeKo: '단체용', roleBadgeEn: 'Organization', icon: 'TrendingUp' },
   { id: 'marketing', labelKo: '홍보 서비스', labelEn: 'Marketing', href: '/marketing', role: 'organization', roleBadgeKo: '단체용', roleBadgeEn: 'Organization', icon: 'Megaphone' },
-  { id: 'fees', labelKo: '수수료 관리', labelEn: 'Fee Mgmt', href: '/fees', role: 'admin', roleBadgeKo: '관리자', roleBadgeEn: 'Admin', icon: 'Settings' },
   { id: 'hr', labelKo: 'HR 관리', labelEn: 'HR', href: '/hr', role: 'organization', roleBadgeKo: '단체용', roleBadgeEn: 'Organization', icon: 'Users' },
+  { id: 'fees', labelKo: '수수료 관리', labelEn: 'Fee Mgmt', href: '/fees', role: 'admin', roleBadgeKo: '관리자', roleBadgeEn: 'Admin', icon: 'Settings' },
 ];
 
 export interface MenuGroup {
@@ -27,7 +29,7 @@ export const MENU_GROUPS: MenuGroup[] = [
     icon: 'User',
     color: 'text-blue-600',
     bgColor: 'bg-blue-500',
-    children: TABS.filter(t => t.role === 'customer'),
+    children: TABS.filter(t => t.role === 'customer' && !t.hidden),
   },
   {
     id: 'organization',
@@ -36,7 +38,7 @@ export const MENU_GROUPS: MenuGroup[] = [
     icon: 'Building2',
     color: 'text-emerald-600',
     bgColor: 'bg-emerald-500',
-    children: TABS.filter(t => t.role === 'organization'),
+    children: TABS.filter(t => t.role === 'organization' && !t.hidden),
   },
   {
     id: 'admin',
@@ -45,7 +47,7 @@ export const MENU_GROUPS: MenuGroup[] = [
     icon: 'Shield',
     color: 'text-orange-600',
     bgColor: 'bg-orange-500',
-    children: TABS.filter(t => t.role === 'admin'),
+    children: TABS.filter(t => t.role === 'admin' && !t.hidden),
   },
 ];
 

@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { employees } from '@/data/employees';
-import { attendanceRecords, dailyAttendance } from '@/data/attendance';
+// import { attendanceRecords, dailyAttendance } from '@/data/attendance';
 import { payrollEntries } from '@/data/payroll';
 import { departments } from '@/data/departments';
 import { formatCurrency } from '@/lib/utils';
@@ -16,7 +16,7 @@ import SearchInput from '@/components/shared/SearchInput';
 import FilterTabs from '@/components/shared/FilterTabs';
 import Button from '@/components/shared/Button';
 import Badge from '@/components/shared/Badge';
-import BarChartCard from '@/components/charts/BarChartCard';
+// import BarChartCard from '@/components/charts/BarChartCard';
 
 import {
   Users,
@@ -123,17 +123,6 @@ export default function HRPage() {
     setCurrentPage(1);
   };
 
-  // Attendance summary
-  const attendanceSummary = useMemo(() => {
-    const total = attendanceRecords.length;
-    const totalPresent = attendanceRecords.reduce((sum, r) => sum + r.presentDays, 0);
-    const totalLate = attendanceRecords.reduce((sum, r) => sum + r.lateDays, 0);
-    const totalVacation = attendanceRecords.reduce((sum, r) => sum + r.vacationUsed, 0);
-    // avg attendance rate based on 22 working days
-    const avgRate = total > 0 ? Math.round((totalPresent / (total * 22)) * 100) : 0;
-    return { avgRate, totalLate, totalVacation };
-  }, []);
-
   // Payroll totals
   const payrollTotals = useMemo(() => {
     const totals = payrollEntries.reduce(
@@ -147,14 +136,6 @@ export default function HRPage() {
     );
     return totals;
   }, []);
-
-  // Daily attendance chart data
-  const dailyChartData = dailyAttendance.map((d) => ({
-    name: d.date.slice(5), // MM-DD
-    present: d.present,
-    late: d.late,
-    absent: d.absent,
-  }));
 
   // Status badge
   const renderStatusBadge = (status: string) => {
@@ -263,73 +244,135 @@ export default function HRPage() {
 
         {/* Table View */}
         {viewMode === 'table' && (
-          <div className="mt-5 overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-3 text-gray-500 font-medium w-12" />
-                  <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.employeeName}</th>
-                  <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.position}</th>
-                  <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.department}</th>
-                  <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.email}</th>
-                  <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.phone}</th>
-                  <th className="text-center py-3 px-3 text-gray-500 font-medium">{t.hr.status}</th>
-                  <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.joinDate}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedEmployees.map((emp) => (
-                  <React.Fragment key={emp.id}>
-                    <tr
-                      onClick={() => setSelectedEmployee(selectedEmployee === emp.id ? null : emp.id)}
-                      className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer"
-                    >
-                      <td className="py-3 px-3">
-                        <Avatar name={emp.name} size="sm" />
-                      </td>
-                      <td className="py-3 px-3 text-gray-900 font-medium">
-                        {lang === 'ko' ? emp.name : emp.nameEn}
-                      </td>
-                      <td className="py-3 px-3 text-gray-600">
+          <>
+            {/* Mobile Card View */}
+            <div className="mt-5 md:hidden space-y-3">
+              {paginatedEmployees.map((emp) => (
+                <div
+                  key={emp.id}
+                  className="bg-white rounded-xl border border-gray-200 p-4 cursor-pointer"
+                  onClick={() => setSelectedEmployee(selectedEmployee === emp.id ? null : emp.id)}
+                >
+                  <div className="flex items-start gap-3 mb-3">
+                    <Avatar name={emp.name} size="md" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-semibold text-gray-900 truncate">
+                          {lang === 'ko' ? emp.name : emp.nameEn}
+                        </h4>
+                        {renderStatusBadge(emp.status)}
+                      </div>
+                      <p className="text-xs text-gray-600 mt-0.5">
                         {lang === 'ko' ? emp.position : emp.positionEn}
-                      </td>
-                      <td className="py-3 px-3 text-gray-600">
+                      </p>
+                      <p className="text-xs text-gray-500">
                         {lang === 'ko' ? emp.department : emp.departmentEn}
-                      </td>
-                      <td className="py-3 px-3 text-gray-500 text-xs">{emp.email}</td>
-                      <td className="py-3 px-3 text-gray-500 text-xs">{emp.phone}</td>
-                      <td className="py-3 px-3 text-center">{renderStatusBadge(emp.status)}</td>
-                      <td className="py-3 px-3 text-gray-500 text-xs">{fmtDate(emp.joinDate)}</td>
-                    </tr>
-                    {selectedEmployee === emp.id && (
-                      <tr key={`${emp.id}-detail`} className="bg-gray-50">
-                        <td colSpan={8} className="px-6 py-4">
-                          <div className="flex flex-col sm:flex-row gap-4">
-                            <div className="flex-1">
-                              <p className="text-xs font-semibold text-gray-500 uppercase mb-1">{t.hr.bio}</p>
-                              <p className="text-sm text-gray-700">{lang === 'ko' ? emp.bio : emp.bioEn}</p>
-                            </div>
-                            {emp.skills && emp.skills.length > 0 && (
-                              <div className="flex-1">
-                                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">{t.hr.skills}</p>
-                                <div className="flex flex-wrap gap-1.5">
-                                  {emp.skills.map((skill, i) => (
-                                    <span key={i} className="bg-brand-100 text-brand-700 px-2.5 py-0.5 rounded-full text-xs font-medium">
-                                      {skill}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <Mail className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                      <span className="truncate">{emp.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <Phone className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                      <span>{emp.phone}</span>
+                    </div>
+                  </div>
+                  {selectedEmployee === emp.id && (
+                    <div className="mt-3 pt-3 border-t border-gray-100 space-y-3">
+                      <div>
+                        <p className="text-xs font-semibold text-gray-500 uppercase mb-1">{t.hr.bio}</p>
+                        <p className="text-sm text-gray-700">{lang === 'ko' ? emp.bio : emp.bioEn}</p>
+                      </div>
+                      {emp.skills && emp.skills.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold text-gray-500 uppercase mb-1">{t.hr.skills}</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {emp.skills.map((skill, i) => (
+                              <span key={i} className="bg-brand-100 text-brand-700 px-2.5 py-0.5 rounded-full text-xs font-medium">
+                                {skill}
+                              </span>
+                            ))}
                           </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="mt-5 overflow-x-auto hidden md:block">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 px-3 text-gray-500 font-medium w-12" />
+                    <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.employeeName}</th>
+                    <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.position}</th>
+                    <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.department}</th>
+                    <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.email}</th>
+                    <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.phone}</th>
+                    <th className="text-center py-3 px-3 text-gray-500 font-medium">{t.hr.status}</th>
+                    <th className="text-left py-3 px-3 text-gray-500 font-medium">{t.hr.joinDate}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedEmployees.map((emp) => (
+                    <React.Fragment key={emp.id}>
+                      <tr
+                        onClick={() => setSelectedEmployee(selectedEmployee === emp.id ? null : emp.id)}
+                        className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer"
+                      >
+                        <td className="py-3 px-3">
+                          <Avatar name={emp.name} size="sm" />
                         </td>
+                        <td className="py-3 px-3 text-gray-900 font-medium">
+                          {lang === 'ko' ? emp.name : emp.nameEn}
+                        </td>
+                        <td className="py-3 px-3 text-gray-600">
+                          {lang === 'ko' ? emp.position : emp.positionEn}
+                        </td>
+                        <td className="py-3 px-3 text-gray-600">
+                          {lang === 'ko' ? emp.department : emp.departmentEn}
+                        </td>
+                        <td className="py-3 px-3 text-gray-500 text-xs">{emp.email}</td>
+                        <td className="py-3 px-3 text-gray-500 text-xs">{emp.phone}</td>
+                        <td className="py-3 px-3 text-center">{renderStatusBadge(emp.status)}</td>
+                        <td className="py-3 px-3 text-gray-500 text-xs">{fmtDate(emp.joinDate)}</td>
                       </tr>
-                    )}
-                  </React.Fragment>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      {selectedEmployee === emp.id && (
+                        <tr key={`${emp.id}-detail`} className="bg-gray-50">
+                          <td colSpan={8} className="px-6 py-4">
+                            <div className="flex flex-col sm:flex-row gap-4">
+                              <div className="flex-1">
+                                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">{t.hr.bio}</p>
+                                <p className="text-sm text-gray-700">{lang === 'ko' ? emp.bio : emp.bioEn}</p>
+                              </div>
+                              {emp.skills && emp.skills.length > 0 && (
+                                <div className="flex-1">
+                                  <p className="text-xs font-semibold text-gray-500 uppercase mb-1">{t.hr.skills}</p>
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {emp.skills.map((skill, i) => (
+                                      <span key={i} className="bg-brand-100 text-brand-700 px-2.5 py-0.5 rounded-full text-xs font-medium">
+                                        {skill}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
 
         {/* Grid View */}
@@ -411,96 +454,7 @@ export default function HRPage() {
         )}
       </Card>
 
-      {/* Section 3 - Attendance Overview */}
-      <Card>
-        <SectionHeader
-          title={lang === 'ko' ? '출근 현황' : 'Attendance Overview'}
-          action={
-            <div className="relative">
-              <select
-                value={payrollMonth}
-                onChange={(e) => setPayrollMonth(e.target.value)}
-                className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-2 pr-10 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500"
-              >
-                {monthOptions.map((m) => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-            </div>
-          }
-        />
-
-        {/* Summary stats */}
-        <div className="mt-4 grid grid-cols-3 gap-4">
-          <div className="bg-blue-50 rounded-xl p-4 text-center">
-            <p className="text-xs text-gray-500 mb-1">{lang === 'ko' ? '평균 출근율' : 'Avg. Attendance'}</p>
-            <p className="text-2xl font-bold text-blue-600">{attendanceSummary.avgRate}%</p>
-          </div>
-          <div className="bg-yellow-50 rounded-xl p-4 text-center">
-            <p className="text-xs text-gray-500 mb-1">{lang === 'ko' ? '총 지각' : 'Total Late'}</p>
-            <p className="text-2xl font-bold text-yellow-600">{attendanceSummary.totalLate}{lang === 'ko' ? '건' : ''}</p>
-          </div>
-          <div className="bg-green-50 rounded-xl p-4 text-center">
-            <p className="text-xs text-gray-500 mb-1">{lang === 'ko' ? '총 연차 사용' : 'Total Leave Used'}</p>
-            <p className="text-2xl font-bold text-green-600">{attendanceSummary.totalVacation}{lang === 'ko' ? '일' : ' days'}</p>
-          </div>
-        </div>
-
-        {/* Attendance table */}
-        <div className="mt-5 overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-3 text-gray-500 font-medium">{lang === 'ko' ? '직원명' : 'Employee'}</th>
-                <th className="text-center py-3 px-3 text-gray-500 font-medium">{t.hr.presentDays}</th>
-                <th className="text-center py-3 px-3 text-gray-500 font-medium">{t.hr.lateDays}</th>
-                <th className="text-center py-3 px-3 text-gray-500 font-medium">{t.hr.absentDays}</th>
-                <th className="text-center py-3 px-3 text-gray-500 font-medium">{t.hr.vacationUsed}</th>
-                <th className="text-center py-3 px-3 text-gray-500 font-medium">{t.hr.vacationRemaining}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {attendanceRecords.map((rec) => (
-                <tr key={rec.employeeId} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                  <td className="py-3 px-3 text-gray-900 font-medium">{rec.employeeName}</td>
-                  <td className={`py-3 px-3 text-center font-medium ${rec.presentDays >= 20 ? 'text-green-600' : 'text-gray-700'}`}>
-                    {rec.presentDays}{lang === 'ko' ? '일' : ''}
-                  </td>
-                  <td className={`py-3 px-3 text-center font-medium ${rec.lateDays > 0 ? 'text-yellow-600' : 'text-gray-400'}`}>
-                    {rec.lateDays}{lang === 'ko' ? '건' : ''}
-                  </td>
-                  <td className={`py-3 px-3 text-center font-medium ${rec.absentDays > 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                    {rec.absentDays}{lang === 'ko' ? '일' : ''}
-                  </td>
-                  <td className="py-3 px-3 text-center text-gray-700">{rec.vacationUsed}{lang === 'ko' ? '일' : ''}</td>
-                  <td className="py-3 px-3 text-center text-gray-700">{rec.vacationRemaining}{lang === 'ko' ? '일' : ''}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Daily Attendance Bar Chart */}
-        <div className="mt-6">
-          <p className="text-sm font-semibold text-gray-700 mb-3">
-            {lang === 'ko' ? '일별 출근 현황' : 'Daily Attendance'}
-          </p>
-          <BarChartCard
-            data={dailyChartData}
-            bars={[
-              { dataKey: 'present', name: lang === 'ko' ? '출근' : 'Present', color: '#10B981' },
-              { dataKey: 'late', name: lang === 'ko' ? '지각' : 'Late', color: '#F59E0B' },
-              { dataKey: 'absent', name: lang === 'ko' ? '결근' : 'Absent', color: '#EF4444' },
-            ]}
-            height={260}
-            tooltipSuffix={lang === 'ko' ? '명' : ''}
-            yAxisFormatter={(v) => `${v}`}
-          />
-        </div>
-      </Card>
-
-      {/* Section 4 - Payroll Summary */}
+      {/* Section 3 - Payroll Summary */}
       <Card>
         <SectionHeader
           title={lang === 'ko' ? '급여 현황' : 'Payroll Summary'}
@@ -526,7 +480,66 @@ export default function HRPage() {
           }
         />
 
-        <div className="mt-5 overflow-x-auto">
+        {/* Mobile Card View */}
+        <div className="mt-5 md:hidden space-y-3">
+          {payrollEntries.map((entry) => (
+            <div key={entry.employeeId} className="bg-white rounded-xl border border-gray-200 p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">
+                    {lang === 'ko' ? entry.employeeName : entry.employeeNameEn}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {lang === 'ko' ? entry.department : entry.departmentEn}
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="text-xs text-gray-500 mb-0.5">{t.hr.baseSalary}</p>
+                  <p className="text-gray-700">{formatCurrency(entry.baseSalary)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-0.5">{t.hr.allowances}</p>
+                  <p className="text-emerald-600">+{formatCurrency(entry.allowances)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-0.5">{t.hr.deductions}</p>
+                  <p className="text-red-500">-{formatCurrency(entry.deductions)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-0.5">{t.hr.netPay}</p>
+                  <p className="text-gray-900 font-bold">{formatCurrency(entry.netPay)}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+          {/* Mobile Totals Card */}
+          <div className="bg-gray-50 rounded-xl border-2 border-gray-300 p-4">
+            <p className="text-sm font-bold text-gray-900 mb-3">{t.common.total}</p>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <p className="text-xs text-gray-500 mb-0.5">{t.hr.baseSalary}</p>
+                <p className="font-bold text-gray-900">{formatCurrency(payrollTotals.baseSalary)}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-0.5">{t.hr.allowances}</p>
+                <p className="font-bold text-emerald-600">+{formatCurrency(payrollTotals.allowances)}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-0.5">{t.hr.deductions}</p>
+                <p className="font-bold text-red-500">-{formatCurrency(payrollTotals.deductions)}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-0.5">{t.hr.netPay}</p>
+                <p className="font-bold text-gray-900">{formatCurrency(payrollTotals.netPay)}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="mt-5 overflow-x-auto hidden md:block">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200">

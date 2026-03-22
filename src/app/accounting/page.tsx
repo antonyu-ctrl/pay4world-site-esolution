@@ -543,8 +543,45 @@ export default function AccountingPage() {
           </div>
         )}
 
-        {/* Transaction Table */}
-        <div className="overflow-x-auto">
+        {/* Mobile Card View */}
+        <div className="md:hidden space-y-3">
+          {paginatedTransactions.map((tx) => (
+            <div key={tx.id} className="bg-white rounded-xl border border-gray-200 p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-gray-500">{tx.date}</span>
+                <Badge
+                  variant={tx.type === 'income' ? 'income' : 'expense'}
+                  label={
+                    tx.type === 'income'
+                      ? lang === 'ko'
+                        ? '수입'
+                        : 'Income'
+                      : lang === 'ko'
+                      ? '지출'
+                      : 'Expense'
+                  }
+                />
+              </div>
+              <p className="text-sm font-medium text-gray-900 mb-1">
+                {lang === 'ko' ? tx.description : tx.descriptionEn}
+              </p>
+              <p className="text-xs text-gray-500 mb-2">
+                {lang === 'ko' ? tx.category : tx.categoryEn}
+              </p>
+              <p
+                className={`text-lg font-bold ${
+                  tx.type === 'income' ? 'text-emerald-600' : 'text-red-500'
+                }`}
+              >
+                {tx.type === 'income' ? '+' : '-'}
+                {formatCurrency(tx.amount)}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Transaction Table */}
+        <div className="overflow-x-auto hidden md:block">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200">

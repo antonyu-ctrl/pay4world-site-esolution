@@ -315,7 +315,38 @@ export default function TaxPage() {
           }
         />
 
-        <div className="mt-4 overflow-x-auto">
+        {/* Mobile Card View */}
+        <div className="mt-4 md:hidden space-y-3">
+          {filteredReceipts.map((record) => (
+            <div key={record.id} className="bg-white rounded-xl border border-gray-200 p-4">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs text-gray-500">{formatDate(record.date)}</span>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant={record.type as 'onetime' | 'recurring'}
+                    label={record.type === 'onetime' ? t.donation.oneTime : t.donation.recurring}
+                  />
+                  <button
+                    onClick={() => alert(`${t.tax.downloadComplete}: ${record.receiptId}`)}
+                    className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors text-gray-500 hover:text-brand-600"
+                  >
+                    <Download className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              <p className="text-sm font-medium text-gray-900 mb-1">
+                {lang === 'ko' ? record.organizationName : record.organizationNameEn}
+              </p>
+              <p className="text-lg font-bold text-gray-900">{formatCurrency(record.amount)}</p>
+            </div>
+          ))}
+          {filteredReceipts.length === 0 && (
+            <div className="py-8 text-center text-gray-400">{t.tax.noReceipts}</div>
+          )}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="mt-4 overflow-x-auto hidden md:block">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200">

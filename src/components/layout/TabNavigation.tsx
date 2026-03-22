@@ -13,6 +13,7 @@ import {
   User,
   Building2,
   Shield,
+  Award,
   Menu,
   X,
   ChevronRight,
@@ -22,7 +23,7 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { MENU_GROUPS } from '@/lib/constants';
 
 const iconMap: Record<string, LucideIcon> = {
-  Heart, FileText, TrendingUp, Megaphone, Settings, Users, User, Building2, Shield,
+  Heart, FileText, TrendingUp, Megaphone, Settings, Users, User, Building2, Shield, Award,
 };
 
 export default function TabNavigation() {

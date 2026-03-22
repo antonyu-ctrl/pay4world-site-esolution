@@ -9,6 +9,7 @@ export interface TabDefinition {
   roleBadgeKo: string;
   roleBadgeEn: string;
   icon: string; // lucide icon name
+  hidden?: boolean;
 }
 
 // Organizations
